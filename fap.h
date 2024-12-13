@@ -1,69 +1,61 @@
-#include "fap.h"
-#include <unistd.h>
-#include <stdlib.h>
+#ifndef __FAP_H__
+#define __FAP_H__
 
-fap creer_fap_vide()
-{
-  return NULL;
-}
+struct maillon;
 
-fap inserer(fap f, int element, int priorite)
-{
-  fap nouveau, courant, precedent;
+typedef struct maillon *fap;
 
-  /* nouveau maillon */
-  nouveau = (fap) malloc(sizeof(struct maillon));
-  nouveau->element = element;
-  nouveau->priorite = priorite;
+struct maillon {
+int element;
+int priorite;
+fap prochain;
+};
 
-  /* insertion en tete */
-  if ((f = NULL) || (priorite < f->priorite))
-    {
-      nouveau->prochain = f;
-      f = nouveau;
-    }
+/*
+   creer_fap_vide
+   description : construit une fap vide
+   parametres : aucun
+   valeur de retour : une fap vide
+   effets de bord : aucun
+*/
+fap creer_fap_vide();
 
-  /* recherche de la bonne position et insertion */
-  else
-    {
-      precedent = f;
-      courant = f->prochain;
-      while ((priorite >= courant->priorite) && (courant != NULL))
-        {
-          precedent = courant;
-          courant = courant->prochain;
-        }
-      precedent->prochain = nouveau;
-      nouveau->prochain = courant;
-    }
-  return f;
-}
-  
-fap extraire(fap f, int *element, int *priorite)
-{
-  fap courant;
+/*
+   inserer
+   description : insere un element etant donne sa priorite.
+   parametres : une fap, un element et sa priorite
+   valeur de retour : la fap une fois l'element insere
+   effets de bord : alloue de la memoire
+*/
+fap inserer(fap f, int element, int priorite);
 
-  /* extraire le premier element si la fap n'est pas vide */
-  if (f != NULL)
-    {
-      courant = f;
-      *element = courant->element;
-      *priorite = courant->priorite;
-      f = courant->prochain;
-      free(courant);
-    }
-  return f;
-}
+/*
+   extraire
+   description : extrait un element prioritaire de la fap.
+   parametres : une fap et les adresses d'un element et d'une priorite
+   valeur de retour : la fap modifi�e
+   effets de bord : libere de la memoire change les valeurs point�es par les
+                    adresses pass�es en param�tre
+*/
+fap extraire(fap f, int *element, int *priorite);
 
-int est_fap_vide(fap f)
-{
-  return f == NULL;
-}
+/*
+   est_fap_vide
+   description : retourne vrai si la fap est vide.
+   parametres : une fap
+   valeur de retour : un booleen
+   effets de bord : aucun
+*/
+int est_fap_vide(fap f);
 
-void
-detruire_fap(fap f)
-{
-  if (f != NULL)
-      free(f);
-}
+/*
+   detruire_fap
+   description : detruit une fap en liberant toute sa memoire
+   parametres : une fap
+   valeur de retour : aucune
+   effets de bord : libere de la memoire
+*/
+void detruire_fap(fap f);
+
+#endif
 
