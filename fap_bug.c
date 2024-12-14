@@ -60,9 +60,7 @@ int est_fap_vide(fap f)
   return f == NULL;
 }
 
-void
-detruire_fap(fap f)
-{
+void detruire_fap(fap f){
   if (f!= NULL){
     detruire_fap(f->prochain);
     free(f);
