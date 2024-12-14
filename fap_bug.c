@@ -28,7 +28,7 @@ fap inserer(fap f, int element, int priorite)
     {
       precedent = f;
       courant = f->prochain;
-      while ((courant != NULL) && priorite >= courant->priorite)
+      while ((priorite >= courant->priorite) && (courant != NULL))
         {
           precedent = courant;
           courant = courant->prochain;
@@ -63,7 +63,9 @@ int est_fap_vide(fap f)
 void
 detruire_fap(fap f)
 {
-  if (f != NULL)
-      free(f);
+  if (f!= NULL){
+    detruire_fap(f->prochain);
+    free(f);
+  }
 }
 
